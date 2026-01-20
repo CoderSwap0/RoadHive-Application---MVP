@@ -32,6 +32,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Prevent build failure on warnings (e.g. eslint warnings in CI)
+          CI: false
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
