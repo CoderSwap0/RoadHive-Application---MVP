@@ -1,0 +1,8 @@
+{
+  "name": "RoadHive Logistics",
+  "description": "A modern logistics platform connecting Shippers, Transporters, and Drivers. Manage loads, track shipments, and streamline freight operations.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ]
+}
