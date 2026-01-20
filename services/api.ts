@@ -1,9 +1,22 @@
 
 import axios from 'axios';
 
+// Determine API Base URL
+// 1. If VITE_API_URL is set in .env (or GitHub Secrets), use it.
+// 2. Otherwise, if running locally, use the Vite proxy ('/api').
+const getBaseUrl = () => {
+  // Safely access import.meta.env to prevent crash if undefined
+  // We explicitly check if 'env' exists on import.meta before accessing properties
+  const meta = import.meta as any;
+  if (meta && meta.env && meta.env.VITE_API_URL) {
+    return `${meta.env.VITE_API_URL}/api`;
+  }
+  return '/api'; // Falls back to proxy in vite.config.ts for local dev
+};
+
 // Create central axios instance
 const api = axios.create({
-  baseURL: '/api', // Proxied by Vite to http://localhost:5000/api
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,11 +29,6 @@ api.interceptors.request.use((config) => {
     try {
         // If token is just a string (new format) vs JSON object (old format)
         // In our authService we store it as a string now.
-        // Let's ensure we handle both for migration safety
-        if (tokenStr.startsWith('{')) {
-             // Old format was not storing token directly maybe?
-             // Assuming new auth service stores raw JWT string
-        }
         config.headers.Authorization = `Bearer ${tokenStr}`;
     } catch (e) {
         console.error("Token parsing error", e);

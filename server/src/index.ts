@@ -10,8 +10,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors() as any);
-app.use(express.json() as any);
+// Configure CORS to allow frontend to communicate with backend
+// In production, replace '*' with your specific GitHub Pages URL, e.g., 'https://yourusername.github.io'
+app.use(cors({
+  origin: [
+    'http://localhost:3000',      // Local React
+    'http://localhost:5173',      // Local Vite
+    process.env.FRONTEND_URL || 'https://coderswap0.github.io/RoadHive-Application---MVP/' // Production Frontend
+  ],
+  credentials: true
+}));
+
+app.use(express.json());
+
+// app.use(cors() as any);
+// app.use(express.json() as any);
 
 // Routes
 app.use('/api/auth', authRoutes);
