@@ -27,9 +27,9 @@ app.use(express.json());
 // app.use(express.json() as any);
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/loads', loadRoutes);
-app.use('/api/users', userRoutes);
+app.use('/auth', authRoutes);
+app.use('/loads', loadRoutes);
+app.use('/users', userRoutes);
 
 // Health Check
 app.get('/health', (_req, res) => {
