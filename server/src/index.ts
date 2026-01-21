@@ -10,15 +10,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS to allow frontend to communicate with backend
-// In production, replace '*' with your specific GitHub Pages URL, e.g., 'https://yourusername.github.io'
-// Update CORS to allow all origins for now to fix the blocking issue.
-// Since we use Bearer tokens (localStorage) and not cookies, 'credentials: true' is not strictly required.
+// 2. CORS Configuration
+// Using 'origin: true' allows any origin to connect while still allowing credentials if necessary.
+// 'optionsSuccessStatus: 200' is important for some legacy browsers/proxies.
 app.use(cors({
-  origin: '*', 
+  origin: true, 
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  optionsSuccessStatus: 200
 }));
+
+// Explicitly handle OPTIONS for all routes
+app.options('*', cors());
 
 app.use(express.json() as any);
 
