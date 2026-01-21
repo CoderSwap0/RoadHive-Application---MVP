@@ -5,27 +5,29 @@ import axios from 'axios';
 // 1. If VITE_API_URL is set in .env (or GitHub Secrets), use it.
 // 2. Otherwise, if running locally, use the Vite proxy ('/api').
 // Determine API Base URL
+// Determine API Base URL
 const getBaseUrl = () => {
   const meta = import.meta as any;
-  
+  let url = '/api'; // Default to proxy
+
   // 1. If VITE_API_URL is set in environment (e.g. .env.production or CI/CD)
   if (meta && meta.env && meta.env.VITE_API_URL) {
-    const url = meta.env.VITE_API_URL.replace(/\/$/, ''); // Remove trailing slash
-    return url.endsWith('/api') ? url : `${url}/api`;
+    url = meta.env.VITE_API_URL;
+  }
+  // 2. If running on Production (GitHub Pages) and no Env var, fallback to Render
+  else if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    url = 'https://roadhive-server.onrender.com';
   }
 
-  // 2. If running on Localhost, use Vite Proxy
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return '/api'; 
+  // Ensure no double slashes when appending /api
+  url = url.replace(/\/$/, '');
+  if (!url.endsWith('/api')) {
+    url += '/api';
   }
-
-  // 3. Fallback for Production (GitHub Pages)
-  // TODO: REPLACE THIS URL with your actual Render Backend URL
-  // Example: https://roadhive-server.onrender.com/api
-  console.warn("Using fallback API URL. Please configure VITE_API_URL in your build environment.");
-  return 'https://roadhive-server.onrender.com/api'; 
+  
+  console.log('API Base URL configured as:', url);
+  return url;
 };
-
 // Create central axios instance
 const api = axios.create({
   baseURL: getBaseUrl(),
