@@ -12,14 +12,12 @@ const PORT = process.env.PORT || 5000;
 
 // Configure CORS to allow frontend to communicate with backend
 // In production, replace '*' with your specific GitHub Pages URL, e.g., 'https://yourusername.github.io'
+// Update CORS to allow all origins for now to fix the blocking issue.
+// Since we use Bearer tokens (localStorage) and not cookies, 'credentials: true' is not strictly required.
 app.use(cors({
-  origin: [
-    'http://localhost:3000',      
-    'http://localhost:5173',
-    'https://coderswap0.github.io', // Added your GitHub Pages domain
-    process.env.FRONTEND_URL || '*'
-  ],
-  credentials: true
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json() as any);
