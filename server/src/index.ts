@@ -41,6 +41,12 @@ app.get('/', (_req, res) => {
   res.send('RoadHive Backend Server is Running!');
 });
 
+// 404 Handler for debugging
+app.use('*', (req, res) => {
+  console.log(`404 Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ error: 'Route not found' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
