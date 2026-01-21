@@ -14,22 +14,20 @@ const PORT = process.env.PORT || 5000;
 // In production, replace '*' with your specific GitHub Pages URL, e.g., 'https://yourusername.github.io'
 app.use(cors({
   origin: [
-    'http://localhost:3000',      // Local React
-    'http://localhost:5173',      // Local Vite
-    process.env.FRONTEND_URL || 'https://coderswap0.github.io/RoadHive-Application---MVP/' // Production Frontend
+    'http://localhost:3000',      
+    'http://localhost:5173',
+    'https://coderswap0.github.io', // Added your GitHub Pages domain
+    process.env.FRONTEND_URL || '*'
   ],
   credentials: true
 }));
 
-app.use(express.json());
-
-// app.use(cors() as any);
-// app.use(express.json() as any);
+app.use(express.json() as any);
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/loads', loadRoutes);
-app.use('/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/loads', loadRoutes);
+app.use('/api/users', userRoutes);
 
 // Health Check
 app.get('/health', (_req, res) => {
